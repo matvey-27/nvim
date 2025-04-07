@@ -14,3 +14,7 @@ vim.opt.shiftwidth = 4
 vim.opt.autoindent = true
 
 vim.opt.fileformat = "unix"
+
+-- Установка пробела как leader (рекомендуется)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "  -- Локальный leader для файл-специфичных keymaps
