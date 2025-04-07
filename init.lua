@@ -1,53 +1,54 @@
--- Установка VimPlug
--- sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
---     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+-- Автоматическая установка vim-plug при необходимости
+local plug_path = vim.fn.stdpath('data') .. '/site/autoload/plug.vim'
+if not vim.loop.fs_stat(plug_path) then
+  vim.fn.system({
+    'curl',
+    '-fLo',
+    plug_path,
+    '--create-dirs',
+    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  })
+end
 
 local vim = vim
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin')
+-- Инициализация плагинов
+vim.call('plug#begin', vim.fn.stdpath('data') .. '/plugged')
 
-home=os.getenv("HOME")
-package.path = home .. "/.config/nvim/?.lua;" .. package.path
-
--- темы
+-- Цветовые схемы
 Plug('rebelot/kanagawa.nvim')
 Plug('morhetz/gruvbox')
 
--- плагин nvim-tree и плагин для поддержки иконок файлов
+-- Файловый менеджер и иконки
 Plug('kyazdani42/nvim-tree.lua')
 Plug('kyazdani42/nvim-web-devicons')
 
--- BarBar - вкладки файлов
+-- Вкладки файлов
 Plug('romgrk/barbar.nvim')
 
--- Lualine - строка статуса 
-Plug('nvim-lualine/lualine.nvim') 
+-- Строка статуса
+Plug('nvim-lualine/lualine.nvim')
 
--- TreeSitter - дерево кода
+-- Синтаксический анализ
 Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
 
--- LSP-сервер и mason
+-- LSP и автодополнение (вынесено в отдельный файл)
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/mason.nvim')
 Plug('williamboman/mason-lspconfig.nvim')
 Plug('hrsh7th/nvim-cmp')
 Plug('hrsh7th/cmp-nvim-lsp')
--- Plug("'VonHeikemen/lsp-zero.nvim'")
+Plug('L3MON4D3/LuaSnip')
+vim.call('plug#', 'VonHeikemen/lsp-zero.nvim', {['branch'] = 'v3.x'})
 
 vim.call('plug#end')
 
-
-dofile"theme.lua"
-
-require"vimtree"
-
--- require"barbar"
-
-require"lua_line"
-
-require"treesitter"
-
-require"lsp"
-
-require"common"
+-- Загрузка модулей
+require('theme')          -- Настройки темы
+require('vimtree')        -- Файловый менеджер
+require('lua_line')       -- Строка статуса
+require('barbar')       -- Строка статуса
+require('treesitter')     -- Синтаксический анализ
+require('lsp-config')     -- LSP конфигурация (вынесено)
+require('common')         -- Общие настройки

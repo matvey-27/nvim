@@ -1,14 +1,8 @@
--- disable netrw at the very start of your init.lua
+-- Настройки Nvim-Tree
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
--- optionally enable 24-bit colour
 vim.opt.termguicolors = true
 
--- empty setup using defaults
-require("nvim-tree").setup()
-
--- OR setup with some options
 require("nvim-tree").setup({
   sort = {
     sorter = "case_sensitive",
@@ -23,3 +17,6 @@ require("nvim-tree").setup({
     dotfiles = true,
   },
 })
+
+-- Горячая клавиша Ctrl+b для открытия/закрытия Nvim-Tree
+vim.keymap.set('n', '<C-b>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
