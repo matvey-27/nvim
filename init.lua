@@ -44,11 +44,14 @@ vim.call('plug#', 'VonHeikemen/lsp-zero.nvim', {['branch'] = 'v3.x'})
 
 vim.call('plug#end')
 
+home=os.getenv("HOME")
+package.path = home .. "/.config/nvim/?.lua;" .. package.path
+
 -- Загрузка модулей
 require('theme')          -- Настройки темы
 require('vimtree')        -- Файловый менеджер
 require('lua_line')       -- Строка статуса
-require('barbar')       -- Строка статуса
+--require('barbar')       -- Строка статуса
 require('treesitter')     -- Синтаксический анализ
 require('lsp-config')     -- LSP конфигурация (вынесено)
 require('common')         -- Общие настройки

@@ -76,5 +76,31 @@ local lsp_zero = require('lsp-zero').preset({
     },
   })
   
+-- Упрощённая настройка автодополнения
+local cmp = require('cmp')
+
+cmp.setup({
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm({select = true}), -- Enter для выбора
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        fallback()
+      end
+    end, {'i', 's'}),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end, {'i', 's'}),
+  },
+  sources = {
+    {name = 'nvim_lsp'}, -- Только LSP-источник
+  }
+})
+
   -- Инициализация LSP
   lsp_zero.setup()
