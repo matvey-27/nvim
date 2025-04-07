@@ -51,7 +51,6 @@ package.path = home .. "/.config/nvim/?.lua;" .. package.path
 require('theme')          -- Настройки темы
 require('vimtree')        -- Файловый менеджер
 require('lua_line')       -- Строка статуса
---require('barbar')       -- Строка статуса
 require('treesitter')     -- Синтаксический анализ
 require('lsp-config')     -- LSP конфигурация (вынесено)
 require('common')         -- Общие настройки
