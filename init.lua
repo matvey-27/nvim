@@ -21,8 +21,10 @@ Plug('rebelot/kanagawa.nvim')
 Plug('morhetz/gruvbox')
 
 -- Файловый менеджер и иконки
-Plug('kyazdani42/nvim-tree.lua')
-Plug('kyazdani42/nvim-web-devicons')
+Plug('nvim-neo-tree/neo-tree.nvim')
+Plug('nvim-tree/nvim-web-devicons')
+Plug('nvim-lua/plenary.nvim')
+Plug("MunifTanjim/nui.nvim")
 
 -- Вкладки файлов
 Plug('romgrk/barbar.nvim')
@@ -49,7 +51,7 @@ package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
 
 -- Загрузка модулей
 require('theme')          -- Настройки темы
-require('vimtree')        -- Файловый менеджер
+require('nvimtree')        -- Файловый менеджер
 require('lua_line')       -- Строка статуса
 require('treesitter')     -- Синтаксический анализ
 require('lsp-config')     -- LSP конфигурация (вынесено)
