@@ -1,59 +1,74 @@
--- Автоматическая установка vim-plug при необходимости
-local plug_path = vim.fn.stdpath('data') .. '/site/autoload/plug.vim'
-if not vim.loop.fs_stat(plug_path) then
+-- Автоматическая установка lazy.nvim при необходимости
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    'curl',
-    '-fLo',
-    plug_path,
-    '--create-dirs',
-    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    lazypath,
   })
 end
+vim.opt.rtp:prepend(lazypath)
 
-local vim = vim
-local Plug = vim.fn['plug#']
+-- Инициализация плагинов с помощью lazy.nvim
+require('lazy').setup({
+  -- стартовое окно
+  { "startup-nvim/startup.nvim" },
 
--- Инициализация плагинов
-vim.call('plug#begin', vim.fn.stdpath('data') .. '/plugged')
+  -- Цветовые схемы
+  { 'rebelot/kanagawa.nvim' },
+  { 'morhetz/gruvbox' },
 
--- Цветовые схемы
-Plug('rebelot/kanagawa.nvim')
-Plug('morhetz/gruvbox')
+  -- Файловый менеджер и иконки
+  { 'nvim-neo-tree/neo-tree.nvim' },
+  { 'nvim-tree/nvim-web-devicons' },
+  { 'nvim-lua/plenary.nvim' },
+  { "MunifTanjim/nui.nvim" },
 
--- Файловый менеджер и иконки
-Plug('nvim-neo-tree/neo-tree.nvim')
-Plug('nvim-tree/nvim-web-devicons')
-Plug('nvim-lua/plenary.nvim')
-Plug("MunifTanjim/nui.nvim")
+  -- Вкладки файлов
+  { 'romgrk/barbar.nvim' },
 
--- Вкладки файлов
-Plug('romgrk/barbar.nvim')
+  -- Строка статуса
+  { 'nvim-lualine/lualine.nvim' },
 
--- Строка статуса
-Plug('nvim-lualine/lualine.nvim')
+  -- Синтаксический анализ
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate'
+  },
 
--- Синтаксический анализ
-Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'})
-
--- LSP и автодополнение (вынесено в отдельный файл)
-Plug('neovim/nvim-lspconfig')
-Plug('williamboman/mason.nvim')
-Plug('williamboman/mason-lspconfig.nvim')
-Plug('hrsh7th/nvim-cmp')
-Plug('hrsh7th/cmp-nvim-lsp')
-Plug('L3MON4D3/LuaSnip')
-vim.call('plug#', 'VonHeikemen/lsp-zero.nvim', {['branch'] = 'v3.x'})
-
-vim.call('plug#end')
-
-home=os.getenv("HOME")
-package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
+  -- LSP и автодополнение (вынесено в отдельный файл)
+  { 'neovim/nvim-lspconfig' },
+  { 'williamboman/mason.nvim' },
+  { 'williamboman/mason-lspconfig.nvim' },
+  { 'hrsh7th/nvim-cmp' },
+  { 'hrsh7th/cmp-nvim-lsp' },
+  { 'L3MON4D3/LuaSnip' },
+  
+  -- lsp-zero для упрощенной настройки LSP
+  {
+    "VonHeikemen/lsp-zero.nvim",
+    branch = "v3.x",
+    dependencies = {
+      {'neovim/nvim-lspconfig'},
+      {'williamboman/mason.nvim'},
+      {'williamboman/mason-lspconfig.nvim'},
+      {'hrsh7th/nvim-cmp'},
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'L3MON4D3/LuaSnip'},
+    }
+  }
+})
 
 -- Загрузка модулей
+local home = os.getenv("HOME")
+package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
+
 require('theme')          -- Настройки темы
-require('nvimtree')        -- Файловый менеджер
-require('lua_line')       -- Строка статуса
-require('treesitter')     -- Синтаксический анализ
-require('lsp-config')     -- LSP конфигурация (вынесено)
-require('common')         -- Общие настройки
-require("bar")
+require('nvimtree')      -- Файловый менеджер
+require('lua_line')      -- Строка статуса
+require('treesitter')    -- Синтаксический анализ
+require('lsp-config')    -- LSP конфигурация (вынесено)
+require('common')        -- Общие настройки
+require("bar")           -- Дополнительные настройки или модули, если есть
