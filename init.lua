@@ -58,17 +58,21 @@ require('lazy').setup({
       {'hrsh7th/cmp-nvim-lsp'},
       {'L3MON4D3/LuaSnip'},
     }
-  }
+  },
+
+  -- терминал
+  { 'akinsho/toggleterm.nvim' }
 })
 
 -- Загрузка модулей
 local home = os.getenv("HOME")
 package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
 
-require('theme')          -- Настройки темы
+require('theme')         -- Настройки темы
 require('nvimtree')      -- Файловый менеджер
 require('lua_line')      -- Строка статуса
 require('treesitter')    -- Синтаксический анализ
 require('lsp-config')    -- LSP конфигурация (вынесено)
 require('common')        -- Общие настройки
-require("bar")           -- Дополнительные настройки или модули, если есть
+require('bar')           -- Дополнительные настройки или модули, если есть
+require('term')
