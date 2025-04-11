@@ -19,6 +19,7 @@ require('lazy').setup({
   -- Цветовые схемы
   { 'rebelot/kanagawa.nvim' },
   { 'morhetz/gruvbox' },
+  { 'sainnhe/everforest' },
 
   -- Файловый менеджер и иконки
   { 'nvim-neo-tree/neo-tree.nvim' },
