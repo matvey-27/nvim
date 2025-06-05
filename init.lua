@@ -13,9 +13,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Инициализация плагинов с помощью lazy.nvim
 require('lazy').setup({
-  -- стартовое окно
-  { "startup-nvim/startup.nvim" },
-
   -- Цветовые схемы
   { 'rebelot/kanagawa.nvim' },
   { 'morhetz/gruvbox' },
@@ -62,7 +59,9 @@ require('lazy').setup({
   },
 
   -- терминал
-  { 'akinsho/toggleterm.nvim' }
+  { 'akinsho/toggleterm.nvim' },
+
+
 })
 
 -- Загрузка модулей
