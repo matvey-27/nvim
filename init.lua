@@ -13,9 +13,72 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Инициализация плагинов с помощью lazy.nvim
 require('lazy').setup({
-  -- стартовое окно
-  { "startup-nvim/startup.nvim" },
+  -- Стартовый экран (альфа)
+  {
+    'goolord/alpha-nvim',
+    config = function()
+      local alpha = require('alpha')
+      local dashboard = require('alpha.themes.dashboard')
 
+      dashboard.section.header.val = {
+        "███╗   ███╗ ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗ ",
+        "████╗ ████║██╔════╝ ██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝",
+        "██║╚██╔╝██║██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  ",
+        "██║ ╚═╝ ██║╚██████╔╝███████╗    ╚██████╗╚██████╔╝██████╔╝███████╗",
+        "╚═╝     ╚═╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝",
+        "                       *nvim config                             "
+      }
+
+      dashboard.section.buttons.val = {
+        {
+          type='button',
+          val='f (find file)',
+          on_press=function()
+            require('telescope.builtin').find_files()
+          end,
+          opts={ hl='SpecialKey', width=20 }
+        },
+        {
+          type='button',
+          val='h (old files)',
+          on_press=function()
+            require('telescope.builtin').oldfiles()
+          end,
+          opts={ hl='SpecialKey', width=20 }
+        },
+        {
+          type='button',
+          val='s (settings)',
+          on_press=function()
+            vim.cmd('edit ~/.config/nvim/init.lua')
+          end,
+          opts={ hl='SpecialKey', width=20 }
+        },
+        {
+          type='button',
+          val='q (exit)',
+          on_press=function()
+            vim.cmd('qa')
+          end,
+          opts={ hl='SpecialKey', width=20 }
+        },
+      }
+
+      -- Стиль
+      local section = dashboard.section
+      section.header.opts.hl = 'Type'
+      for _, button in ipairs(section.buttons.val) do
+        button.opts.hl = 'Keyword'
+      end
+
+      alpha.setup(dashboard.config)
+    end
+  },
+
+  {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  },
   -- Цветовые схемы
   { 'rebelot/kanagawa.nvim' },
   { 'morhetz/gruvbox' },
