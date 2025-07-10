@@ -76,6 +76,23 @@ require('lazy').setup({
   },
 
   {
+    'mfussenegger/nvim-dap',
+    dependencies = {
+      'rcarriga/nvim-dap-ui',
+      'nvim-neotest/nvim-nio',
+      'theHamsta/nvim-dap-virtual-text',
+      'williamboman/mason.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+    },
+    config = function()
+      require("nvim-dap-virtual-text").setup()
+      require("mason-nvim-dap").setup {
+        ensure_installed = { "cpptools" },
+        automatic_installation = true,
+      }
+    end
+  },
+  {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   },
@@ -140,3 +157,4 @@ require('lsp-config')    -- LSP конфигурация (вынесено)
 require('common')        -- Общие настройки
 require('bar')           -- Дополнительные настройки или модули, если есть
 require('term')
+require('dap-config')
