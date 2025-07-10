@@ -162,9 +162,3 @@ git clone --filter=blob:none https://github.com/folke/lazy.nvim.git ~/.local/sha
 | :Mason               | Управление LSP-серверами      |
 | :NvimTreeToggle      | Включить / отключить файловый менеджер |
 | :checkhealth         | Проверить состояние Neovim и плагинов |
-
----
-
-## Пояснения
-
-1. <leader> — это пользовательский префикс клавиш. По умолчанию — \, часто переопределяется на пробел:
