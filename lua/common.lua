@@ -19,6 +19,8 @@ vim.opt.fileformat = "unix"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "  -- Локальный leader для файл-специфичных keymaps
 
+vim.keymap.set('n', '<leader>t', ':Telescope<CR>', { noremap = true, silent = true })
+
 local dap = require('dap')
 
 -- Шаги на удобные клавиши, например:

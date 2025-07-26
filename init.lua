@@ -149,7 +149,7 @@ require('lazy').setup({
 local home = os.getenv("HOME")
 package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
 
-require('theme')         -- Настройки темы
+require'theme'         -- Настройки темы
 require('nvimtree')      -- Файловый менеджер
 require('lua_line')      -- Строка статуса
 require('treesitter')    -- Синтаксический анализ

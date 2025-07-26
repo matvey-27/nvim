@@ -8,7 +8,7 @@ local lsp_zero = require('lsp-zero').preset({
 require('mason').setup()
 require('mason-lspconfig').setup({
   -- Не указываем automatic_installation
-  ensure_installed = { 'tsserver' } -- список только нужных серверов
+  ensure_installed = { "tsserve" } -- список только нужных серверов
 })
 
 local lspconfig = require('lspconfig')
