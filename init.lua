@@ -26,7 +26,7 @@ require('lazy').setup({
         "██║╚██╔╝██║██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  ",
         "██║ ╚═╝ ██║╚██████╔╝███████╗    ╚██████╗╚██████╔╝██████╔╝███████╗",
         "╚═╝     ╚═╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝",
-        "                       *nvim config                             "
+        "                                 *nvim config                   "
       }
 
       dashboard.section.buttons.val = {
@@ -96,6 +96,38 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   },
+
+  -- UI-улучшения
+  {
+    'folke/noice.nvim',
+    dependencies = {
+      -- noice.nvim требует nui.nvim, который у вас уже есть
+      -- "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-dap-ui",
+      "folke/neodev.nvim", -- Рекомендуется для разработки плагинов
+    },
+    config = function()
+      require("noice").setup({
+        -- Базовая конфигурация для красивых сообщений
+        views = {
+          messages = {
+            view = "popup",
+            size = { min = 10, max = 20 },
+          },
+          health = {
+            view = "popup",
+            size = { min = 20, max = 30 },
+          },
+        },
+        messages = {
+          -- Вы можете настроить правила фильтрации сообщений
+          -- Например, скрывать сообщения от определенных плагинов
+        },
+        -- Другие настройки
+      })
+    end
+  },
+
   -- Цветовые схемы
   { 'rebelot/kanagawa.nvim' },
   { 'morhetz/gruvbox' },
@@ -126,7 +158,7 @@ require('lazy').setup({
   { 'hrsh7th/nvim-cmp' },
   { 'hrsh7th/cmp-nvim-lsp' },
   { 'L3MON4D3/LuaSnip' },
-  
+
   -- lsp-zero для упрощенной настройки LSP
   {
     "VonHeikemen/lsp-zero.nvim",
@@ -157,3 +189,4 @@ require('common')        -- Общие настройки
 require('bar')           -- Дополнительные настройки или модули, если есть
 require('term')
 require('dap-config')
+
