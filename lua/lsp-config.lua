@@ -115,6 +115,14 @@ cmp.setup({
       })[entry.source.name]
       return vim_item
     end
-  }
+  },
+  -- Добавляем скругление углов для окна автодополнения
+  window = {
+    completion = {
+      border = "rounded",
+    },
+    documentation = {
+      border = "rounded",
+    },
+  },
 })
-
