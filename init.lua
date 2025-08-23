@@ -13,65 +13,67 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Инициализация плагинов с помощью lazy.nvim
 require('lazy').setup({
-  -- Стартовый экран (альфа)
+  -- Новый стартовый экран (dashboard-nvim)
   {
-    'goolord/alpha-nvim',
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
     config = function()
-      local alpha = require('alpha')
-      local dashboard = require('alpha.themes.dashboard')
+      local M = {}
+      local dashboard = require('dashboard')
 
-      dashboard.section.header.val = {
-        "███╗   ███╗ ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗ ",
-        "████╗ ████║██╔════╝ ██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝",
-        "██║╚██╔╝██║██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  ",
-        "██║ ╚═╝ ██║╚██████╔╝███████╗    ╚██████╗╚██████╔╝██████╔╝███████╗",
-        "╚═╝     ╚═╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝",
-        "                                 *nvim config                   "
+      -- Define the header for the dashboard with the cow
+      M.header = {
+        '                                ',
+        '   ▄   ▄',
+        '   █▀█▀█',
+        '   █▄█▄█',
+        '       ███  ▄▄',
+        '        ████▐█ █',
+        '        ████   █',
+        '       ▀▀▀▀▀▀▀',
+        '                                ',
       }
 
-      dashboard.section.buttons.val = {
-        {
-          type='button',
-          val='f (find file)',
-          on_press=function()
-            require('telescope.builtin').find_files()
-          end,
-          opts={ hl='SpecialKey', width=20 }
+      -- Setup the dashboard with the configured sections
+      dashboard.setup({
+        theme = 'hyper',
+        config = {
+          header = M.header,
+          -- Re-adding the shortcut section for buttons
+          shortcut = {
+            {
+              desc = ' Find files',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'f',
+              action = 'Telescope find_files',
+            },
+            {
+              desc = ' Create new file',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'n',
+              action = function()
+                vim.ui.input({ prompt = 'Enter new file name: ' }, function(filename)
+                  if filename and filename ~= '' then
+                    vim.cmd('edit ' .. filename)
+                  end
+                end)
+              end,
+            },
+            {
+              desc = ' Quit',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'q',
+              action = 'qa',
+            },
+          },
         },
-        {
-          type='button',
-          val='h (old files)',
-          on_press=function()
-            require('telescope.builtin').oldfiles()
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-        {
-          type='button',
-          val='s (settings)',
-          on_press=function()
-            vim.cmd('edit ~/.config/nvim/init.lua')
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-        {
-          type='button',
-          val='q (exit)',
-          on_press=function()
-            vim.cmd('qa')
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-      }
-
-      -- Стиль
-      local section = dashboard.section
-      section.header.opts.hl = 'Type'
-      for _, button in ipairs(section.buttons.val) do
-        button.opts.hl = 'Keyword'
-      end
-
-      alpha.setup(dashboard.config)
+      })
     end
   },
 
