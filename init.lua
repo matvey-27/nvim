@@ -13,65 +13,67 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Инициализация плагинов с помощью lazy.nvim
 require('lazy').setup({
-  -- Стартовый экран (альфа)
+  -- Новый стартовый экран (dashboard-nvim)
   {
-    'goolord/alpha-nvim',
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
     config = function()
-      local alpha = require('alpha')
-      local dashboard = require('alpha.themes.dashboard')
+      local M = {}
+      local dashboard = require('dashboard')
 
-      dashboard.section.header.val = {
-        "███╗   ███╗ ██████╗ ███████╗     ██████╗ ██████╗ ██████╗ ███████╗ ",
-        "████╗ ████║██╔════╝ ██╔════╝    ██╔════╝██╔═══██╗██╔══██╗██╔════╝",
-        "██║╚██╔╝██║██║   ██║██╔══╝      ██║     ██║   ██║██║  ██║██╔══╝  ",
-        "██║ ╚═╝ ██║╚██████╔╝███████╗    ╚██████╗╚██████╔╝██████╔╝███████╗",
-        "╚═╝     ╚═╝ ╚═════╝ ╚══════╝     ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝",
-        "                       *nvim config                             "
+      -- Define the header for the dashboard with the cow
+      M.header = {
+        '                                ',
+        '   ▄   ▄',
+        '   █▀█▀█',
+        '   █▄█▄█',
+        '       ███  ▄▄',
+        '        ████▐█ █',
+        '        ████   █',
+        '       ▀▀▀▀▀▀▀',
+        '                                ',
       }
 
-      dashboard.section.buttons.val = {
-        {
-          type='button',
-          val='f (find file)',
-          on_press=function()
-            require('telescope.builtin').find_files()
-          end,
-          opts={ hl='SpecialKey', width=20 }
+      -- Setup the dashboard with the configured sections
+      dashboard.setup({
+        theme = 'hyper',
+        config = {
+          header = M.header,
+          -- Re-adding the shortcut section for buttons
+          shortcut = {
+            {
+              desc = ' Find files',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'f',
+              action = 'Telescope find_files',
+            },
+            {
+              desc = ' Create new file',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'n',
+              action = function()
+                vim.ui.input({ prompt = 'Enter new file name: ' }, function(filename)
+                  if filename and filename ~= '' then
+                    vim.cmd('edit ' .. filename)
+                  end
+                end)
+              end,
+            },
+            {
+              desc = ' Quit',
+              icon = ' ',
+              icon_hl = '@variable.builtin',
+              group = 'Label',
+              key = 'q',
+              action = 'qa',
+            },
+          },
         },
-        {
-          type='button',
-          val='h (old files)',
-          on_press=function()
-            require('telescope.builtin').oldfiles()
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-        {
-          type='button',
-          val='s (settings)',
-          on_press=function()
-            vim.cmd('edit ~/.config/nvim/init.lua')
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-        {
-          type='button',
-          val='q (exit)',
-          on_press=function()
-            vim.cmd('qa')
-          end,
-          opts={ hl='SpecialKey', width=20 }
-        },
-      }
-
-      -- Стиль
-      local section = dashboard.section
-      section.header.opts.hl = 'Type'
-      for _, button in ipairs(section.buttons.val) do
-        button.opts.hl = 'Keyword'
-      end
-
-      alpha.setup(dashboard.config)
+      })
     end
   },
 
@@ -96,6 +98,38 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   },
+
+  -- UI-улучшения
+  {
+    'folke/noice.nvim',
+    dependencies = {
+      -- noice.nvim требует nui.nvim, который у вас уже есть
+      -- "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-dap-ui",
+      "folke/neodev.nvim", -- Рекомендуется для разработки плагинов
+    },
+    config = function()
+      require("noice").setup({
+        -- Базовая конфигурация для красивых сообщений
+        views = {
+          messages = {
+            view = "popup",
+            size = { min = 10, max = 20 },
+          },
+          health = {
+            view = "popup",
+            size = { min = 20, max = 30 },
+          },
+        },
+        messages = {
+          -- Вы можете настроить правила фильтрации сообщений
+          -- Например, скрывать сообщения от определенных плагинов
+        },
+        -- Другие настройки
+      })
+    end
+  },
+
   -- Цветовые схемы
   { 'rebelot/kanagawa.nvim' },
   { 'morhetz/gruvbox' },
@@ -126,7 +160,7 @@ require('lazy').setup({
   { 'hrsh7th/nvim-cmp' },
   { 'hrsh7th/cmp-nvim-lsp' },
   { 'L3MON4D3/LuaSnip' },
-  
+
   -- lsp-zero для упрощенной настройки LSP
   {
     "VonHeikemen/lsp-zero.nvim",
@@ -152,9 +186,9 @@ package.path = home .. "/.config/nvim/lua/?.lua;" .. package.path
 require'theme'         -- Настройки темы
 require('nvimtree')      -- Файловый менеджер
 require('lua_line')      -- Строка статуса
-require('treesitter')    -- Синтаксический анализ
 require('lsp-config')    -- LSP конфигурация (вынесено)
 require('common')        -- Общие настройки
 require('bar')           -- Дополнительные настройки или модули, если есть
 require('term')
 require('dap-config')
+

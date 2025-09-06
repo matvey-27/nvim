@@ -31,7 +31,6 @@ for _, server in ipairs(servers) do
       -- Навигация по ошибкам
       vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
       vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-      vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, opts)
       vim.keymap.set('n', '<leader>dl', function()
         vim.diagnostic.setloclist({open=true})
       end, opts)
@@ -53,6 +52,37 @@ end
 -- Настройка автодополнения с nvim-cmp
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
+-- Добавляем плагины для иконок и форматирования
+local luasnip = require('luasnip')
+
+-- Улучшаем внешний вид иконок
+local kind_icons = {
+  Text = "",
+  Method = "m",
+  Function = "F",
+  Constructor = "c",
+  Field = "f",
+  Variable = "v",
+  Class = "C",
+  Interface = "I",
+  Module = "M",
+  Property = "p",
+  Unit = "U",
+  Value = "V",
+  Enum = "E",
+  Keyword = "K",
+  Snippet = "S",
+  Color = "o",
+  File = "F",
+  Reference = "R",
+  Folder = "F",
+  EnumMember = "E",
+  Constant = "C",
+  Struct = "S",
+  Event = "e",
+  Operator = "O",
+  TypeParameter = "T",
+}
 
 cmp.setup({
   sources = {
@@ -67,29 +97,32 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
     ['<C-Space>'] = cmp.mapping.complete(),
   },
-  snippet={
-    expand=function(args)
-      require('luasnip').lsp_expand(args.body)
+  snippet = {
+    -- Привязываем LuaSnip к nvim-cmp
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
     end,
   },
-})
-
--- Включение настроек lsp-zero
-lsp_zero.setup()
-
--- Настройки диагностики
-vim.diagnostic.config({
-  virtual_text=true,
-  signs=true,
-  update_in_insert=false,
-  underline=true,
-  severity_sort=true,
-  float={
-    focusable=false,
-    style='minimal',
-    border='rounded',
-    source='always',
-    header='',
-    prefix='',
-  }
+  formatting = {
+    -- Настраиваем внешний вид
+    format = function(entry, vim_item)
+      -- Добавляем иконки
+      vim_item.kind = kind_icons[vim_item.kind] or ""
+      -- Делаем текст более читабельным
+      vim_item.menu = ({
+        nvim_lsp = "[LSP]",
+        luasnip = "[Snippet]",
+      })[entry.source.name]
+      return vim_item
+    end
+  },
+  -- Добавляем скругление углов для окна автодополнения
+  window = {
+    completion = {
+      border = "rounded",
+    },
+    documentation = {
+      border = "rounded",
+    },
+  },
 })
