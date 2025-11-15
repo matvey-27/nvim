@@ -11,7 +11,7 @@ return {
         insert_mappings = true,
         terminal_mappings = true,
         persist_size = true,
-        direction = 'float', -- или 'vertical', 'tab'
+        direction = 'float',
     }
   end,
 }

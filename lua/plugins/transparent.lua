@@ -17,6 +17,9 @@ return {
         require('transparent').clear_prefix('BufferLine')
         require('transparent').clear_prefix('NeoTree')
         require('transparent').clear_prefix('lualine')
+        require('transparent').clear_prefix('Buffer')
+        require('transparent').clear_prefix('BufferDefaultCurrent')
+        require('transparent').clear_prefix('BufferInactive')
 
         vim.keymap.set("n", "<leader>tt", "<cmd>TransparentToggle<CR>", { desc = "Toggle transparency" })
     end

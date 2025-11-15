@@ -10,17 +10,13 @@ return {
       "saadparwaiz1/cmp_luasnip",
     },
     config = function()
-      -- Настройка Mason
       require('mason').setup()
-
-      -- Настройка mason-lspconfig
       require('mason-lspconfig').setup({
         ensure_installed = { "tsserver", "lua_ls" },
         automatic_installation = true,
         automatic_enable = true,
       })
 
-      -- Настройка LSP
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -28,6 +24,8 @@ return {
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = bufnr })
+
+        vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { buffer = bufnr, desc = "Показать ошибки" })
       end
       
       local servers = require('mason-lspconfig').get_installed_servers()
@@ -41,7 +39,6 @@ return {
         })
       end
 
-      -- Настройка автодополнения с nvim-cmp
       local cmp = require('cmp')
       local luasnip = require('luasnip')
       local kind_icons = {
